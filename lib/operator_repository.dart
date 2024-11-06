@@ -11,7 +11,7 @@ class OperatorsRepository {
   }) async {
     try {
       // Simulate a network delay
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 4));
 
       // Generate mock user data
       final users = List.generate(

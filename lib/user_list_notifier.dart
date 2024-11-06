@@ -7,6 +7,20 @@ import 'operator_repository.dart';
 part 'user_list_notifier.g.dart';
 
 @riverpod
+class PaginationLoading extends _$PaginationLoading {
+  /// Classes annotated by `@riverpod` **must** define a [build] function.
+  /// This function is expected to return the initial state of your shared state.
+  /// It is totally acceptable for this function to return a [Future] or [Stream] if you need to.
+  /// You can also freely define parameters on this method.
+  @override
+  bool build() => false;
+
+  void update(bool value) {
+    state = value;
+  }
+}
+
+@riverpod
 class UserListNotifier extends _$UserListNotifier {
   late OperatorsRepository _operatorsRepository;
   int _currentPage = 0;
@@ -34,6 +48,7 @@ class UserListNotifier extends _$UserListNotifier {
 
   Future<void> fetchPaginatedUsers() async {
     if (_noMoreItems) return;
+    ref.read(paginationLoadingProvider.notifier).update(true);
 
     final result = await _operatorsRepository.fetchUsers(
       offset: _currentPage * 20,
@@ -43,12 +58,14 @@ class UserListNotifier extends _$UserListNotifier {
     result.fold(
       (error) {
         state = AsyncValue.error(error, StackTrace.empty);
+        ref.read(paginationLoadingProvider.notifier).update(false);
       },
       (newUsers) {
         final currentData = state!.value ?? [];
         state = AsyncValue.data([...currentData, ...newUsers]);
         _currentPage++;
         _noMoreItems = newUsers.length < 20;
+        ref.read(paginationLoadingProvider.notifier).update(false);
       },
     );
   }

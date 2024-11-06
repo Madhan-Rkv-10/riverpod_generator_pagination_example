@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_generator_pagination/user_list_notifier.dart';
 
@@ -20,43 +23,72 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class UserListView extends ConsumerWidget {
+class UserListView extends HookConsumerWidget {
   const UserListView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userListState = ref.watch(userListNotifierProvider);
+    final scrollController = useScrollController();
 
-    return userListState?.when(
-          data: (users) => NotificationListener<ScrollNotification>(
-            onNotification: (scrollInfo) {
-              // Check if we're close to the bottom
-              if (scrollInfo.metrics.pixels >=
-                  scrollInfo.metrics.maxScrollExtent - 200) {
-                ref
-                    .read(userListNotifierProvider.notifier)
-                    .fetchPaginatedUsers();
-              }
-              return false; // Continue to propagate notification
-            },
-            child: ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (context, index) {
-                // if (index == users.length) {
-                //   return const Center(child: CircularProgressIndicator());
-                // }
-                final user = users[index];
-                return ListTile(
-                  title: Text(user.name),
-                  subtitle: Text('Age: ${user.age}'),
-                  trailing: Text('ID: ${user.id}'),
-                );
-              },
-            ),
-          ),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, stack) => Center(child: Text('Error: $err')),
-        ) ??
-        const SizedBox();
+    useEffect(() {
+      scrollController.addListener(() {
+        if ((scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent)) {
+          ref.read(userListNotifierProvider.notifier).fetchPaginatedUsers();
+        }
+        // double maxScroll = scrollController.position.maxScrollExtent;
+        // double currentScroll = scrollController.position.pixels;
+        // double delta = MediaQuery.of(context).size.width * 0.20;
+        // if (allTransactionProvider is AsyncLoading) {
+        // } else {
+        //   if (maxScroll - currentScroll <= delta) {
+        //     ref
+        //         .read(transactionControllerProvider.notifier)
+        //         .getPaginatedTransactions(paginatedIndex: 1);
+        //   }
+        // }
+      });
+      return null;
+    }, [scrollController]);
+    return SingleChildScrollView(
+      controller: scrollController,
+      child: Column(
+        children: [
+          userListState?.when(
+                data: (users) => ListView.builder(
+                  itemCount: users.length,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    // if (index == users.length) {
+                    //   return const Center(child: CircularProgressIndicator());
+                    // }
+                    final user = users[index];
+                    return ListTile(
+                      title: Text(user.name),
+                      subtitle: Text('Age: ${user.age}'),
+                      trailing: Text('ID: ${user.id}'),
+                    );
+                  },
+                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(child: Text('Error: $err')),
+              ) ??
+              SizedBox(),
+          HookConsumer(builder: (context, ref, child) {
+            final isPaginatedLoading = ref.watch(paginationLoadingProvider);
+            print(isPaginatedLoading);
+            return isPaginatedLoading
+                ? const SizedBox(
+                    // height: 100,
+                    child: CircularProgressIndicator(
+                    color: Colors.blue,
+                  ))
+                : const SizedBox();
+          })
+        ],
+      ),
+    );
   }
 }

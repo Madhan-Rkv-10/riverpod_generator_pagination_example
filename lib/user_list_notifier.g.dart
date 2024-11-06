@@ -6,7 +6,23 @@ part of 'user_list_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userListNotifierHash() => r'02088bc3501a62cba0347226219c05c5c99bbd59';
+String _$paginationLoadingHash() => r'83427e6949f69cc468a03d81e0326e028f404fb7';
+
+/// See also [PaginationLoading].
+@ProviderFor(PaginationLoading)
+final paginationLoadingProvider =
+    AutoDisposeNotifierProvider<PaginationLoading, bool>.internal(
+  PaginationLoading.new,
+  name: r'paginationLoadingProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$paginationLoadingHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$PaginationLoading = AutoDisposeNotifier<bool>;
+String _$userListNotifierHash() => r'325e7f24576e96ff5758bf2b6cd17ba83467fa1d';
 
 /// See also [UserListNotifier].
 @ProviderFor(UserListNotifier)
