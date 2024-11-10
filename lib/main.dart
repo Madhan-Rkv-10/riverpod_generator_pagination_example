@@ -66,7 +66,7 @@ class UserListView extends HookConsumerWidget {
               SizedBox(),
           HookConsumer(builder: (context, ref, child) {
             final isPaginatedLoading = ref.watch(paginationLoadingProvider);
-            print(isPaginatedLoading);
+
             return isPaginatedLoading
                 ? const SizedBox(
                     // height: 100,

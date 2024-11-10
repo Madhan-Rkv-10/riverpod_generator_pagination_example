@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'operator_repository.dart';
+import 'user_repository.dart';
 
 part 'user_list_notifier.g.dart';
 
