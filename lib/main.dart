@@ -49,9 +49,6 @@ class UserListView extends HookConsumerWidget {
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    // if (index == users.length) {
-                    //   return const Center(child: CircularProgressIndicator());
-                    // }
                     final user = users[index];
                     return ListTile(
                       title: Text(user.name),
@@ -69,7 +66,6 @@ class UserListView extends HookConsumerWidget {
 
             return isPaginatedLoading
                 ? const SizedBox(
-                    // height: 100,
                     child: CircularProgressIndicator(
                     color: Colors.blue,
                   ))
