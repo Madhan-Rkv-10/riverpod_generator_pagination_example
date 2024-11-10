@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -15,8 +13,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(title: const Text('User List')),
+        appBar: AppBar(title: const Text('Riverpod Generator Pagination')),
         body: const UserListView(),
       ),
     );
@@ -37,17 +36,6 @@ class UserListView extends HookConsumerWidget {
             scrollController.position.maxScrollExtent)) {
           ref.read(userListNotifierProvider.notifier).fetchPaginatedUsers();
         }
-        // double maxScroll = scrollController.position.maxScrollExtent;
-        // double currentScroll = scrollController.position.pixels;
-        // double delta = MediaQuery.of(context).size.width * 0.20;
-        // if (allTransactionProvider is AsyncLoading) {
-        // } else {
-        //   if (maxScroll - currentScroll <= delta) {
-        //     ref
-        //         .read(transactionControllerProvider.notifier)
-        //         .getPaginatedTransactions(paginatedIndex: 1);
-        //   }
-        // }
       });
       return null;
     }, [scrollController]);

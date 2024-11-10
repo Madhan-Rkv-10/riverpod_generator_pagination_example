@@ -22,7 +22,7 @@ class PaginationLoading extends _$PaginationLoading {
 
 @riverpod
 class UserListNotifier extends _$UserListNotifier {
-  late OperatorsRepository _operatorsRepository;
+  late UsersRepository _operatorsRepository;
   int _currentPage = 0;
   bool _noMoreItems = false;
 

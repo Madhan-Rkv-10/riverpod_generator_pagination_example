@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod/riverpod.dart';
 
-final operatorsRepositoryProvider = Provider((ref) => OperatorsRepository());
+final operatorsRepositoryProvider = Provider((ref) => UsersRepository());
 
-class OperatorsRepository {
+class UsersRepository {
   Future<Either<String, List<User>>> fetchUsers({
     required int offset,
     required int pageSize,
